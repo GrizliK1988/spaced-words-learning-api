@@ -1,0 +1,50 @@
+{
+  "properties": {
+    "id": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      },
+      "fielddata": true
+    },
+    "name": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      },
+      "fielddata": true
+    },
+    "createDate": {
+      "type": "date"
+    },
+    "archived": {
+      "type": "boolean"
+    },
+    "repeats": {
+      "properties": {
+        "id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          },
+          "fielddata": true
+        },
+        "date": {
+          "type": "date"
+        },
+        "learned": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+app:
+    container_name: cousine-app
+    build: ./docker/php
+    ports:
+        - "8007:80"
+    volumes:
+        - ./:/app
+        - ./var/sessions:/var/lib/php/sessions
+    links:
+        - elastic
+
+elastic:
+    container_name: cousine-elastic
+    image: elasticsearch:5.5.0
+    ports:
+        - "9200:9200"
+    volumes:
+        - ./vendor/elastic_backup:/usr/share/elasticsearch/backup
+        - ./docker/elasticsearch/config:/usr/share/elasticsearch/config
+        - ./vendor/var/elasticsearch/esdata:/usr/share/elasticsearch/data

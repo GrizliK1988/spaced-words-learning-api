@@ -1,0 +1,38 @@
+FROM php:7.1.8-apache
+
+RUN apt-get update -y
+
+RUN apt-get install -y --allow-unauthenticated wget curl
+
+RUN curl -sS -o /tmp/icu.tar.gz -L http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz && tar -zxf /tmp/icu.tar.gz -C /tmp && cd /tmp/icu/source && ./configure --prefix=/usr/local && make && make install
+
+RUN docker-php-ext-configure intl --with-icu-dir=/usr/local && \
+    docker-php-ext-install -j$(nproc) intl
+
+RUN docker-php-ext-install -j$(nproc) opcache
+COPY php.ini /usr/local/etc/php/
+
+RUN mkdir /var/www/cache
+RUN mkdir /var/www/logs
+RUN mkdir /var/www/sessions
+RUN rm -r /var/www/html
+
+RUN ln -s /app/vendor/web/.htaccess /var/www/html/.htaccess
+
+RUN ln -s /app/vendor/web/app.php /var/www/html/app.php
+RUN ln -s /app/vendor/web/app_dev.php /var/www/html/app_dev.php
+
+RUN ln -s /app/vendor/web/favicon.ico /var/www/html/favicon.ico
+
+RUN usermod -u $USER_ID www-data -s /bin/bash
+RUN usermod -d /var/www/ www-data
+RUN usermod -d /var/www/cache www-data
+RUN usermod -d /var/www/logs www-data
+RUN usermod -d /var/www/sessions www-data
+
+RUN a2enmod rewrite
+
+#Composer
+RUN curl -s http://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN chmod +x /usr/local/bin/composer

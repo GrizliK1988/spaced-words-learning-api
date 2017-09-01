@@ -17,3 +17,9 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    elastic.host: elastic
+    elastic.port: 9200
+
+    spaced_learning.set.index: "learning-set"
+    spaced_learning.set.type: "sets"
